@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Świąteczne losowanie prezentu</title>
+  <style>
+    body {
+      background-color: #f0f0f0;
+      color: #333;
+      font-family: 'Pacifico', cursive;
+    }
+
+    h2, label, p {
+      color: #333;
+      text-transform: capitalize;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: #fff;
+      padding: 10px;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+  </style>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap">
+</head>
+<body>
+
+  <h2>Świąteczne losowanie prezentu</h2>
+
+  <form id="formularz">
+    <label for="imie">Twoje imię:</label>
+    <input type="text" id="imie">
+    <button type="button" onclick="losujPrezent()" id="guzikLosowania">Wylosuj prezent</button>
+    <p id="wynik"></p>
+  </form>
+
+  <script>
+    var imiona = ['Kasia', 'Karol', 'Gosia', 'Ola', 'Piotrek', 'Carlo', 'Karolina', 'Agnieszka', 'Mateusz', 'Wojtek'];
+    var wynikiLosowania = [];
+
+    function losujPrezent() {
+      var twojeImie = document.getElementById('imie').value.toLowerCase();
+
+      // Losowanie indeksu
+      var losowyIndex;
+
+      do {
+        losowyIndex = Math.floor(Math.random() * imiona.length);
+      } while (imiona[losowyIndex] === twojeImie);
+
+      // Wybranie osoby
+      var osobaWylosowana = imiona[losowyIndex];
+
+      // Dodanie wyniku losowania do tablicy
+      wynikiLosowania.push({ osoba: twojeImie, przypisanaOsoba: osobaWylosowana });
+
+      // Wyświetlenie wyniku
+      document.getElementById('wynik').innerText = 'Przypisana osoba dla ' + twojeImie + ' to: ' + osobaWylosowana;
+
+      // Aktualizacja wyników na GitHub Pages
+      updateGitHubPages();
+    }
+
+    function updateGitHubPages() {
+      var jsonData = JSON.stringify(wynikiLosowania, null, 2);
+      var blob = new Blob([jsonData], { type: 'application/json' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = 'wynikiLosowania.json';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+  </script>
+
+</body>
+</html>
